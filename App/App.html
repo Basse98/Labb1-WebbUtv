@@ -3,28 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Quizmaster</title>
-    <script>
-
-        var res;
-        var test = new XMLHttpRequest;
-        test.onreadystatechange = function(){
-            if(this.readyState === 4){
-                if(test.status === 200){
-                    res = test.response;
-                    console.log(res);
-                }else{
-                    console.log("HTTP-status är inte 200, utan " + test.status);
-                }
-            }
-
-        };
-        test.open("GET"," https://opentdb.com/api.php?amount=10&category=27");
-        test.responseType="json";
-        test.send();
-
+    <script src="js_code.js">
     </script>
 </head>
 <body>
+<main>
+    <div>
+        <ul id="list">
 
+        </ul>
+    </div>
+    <button id="submitButton">
+        Submit Quiz
+    </button>
+</main>
 </body>
 </html>
