@@ -2,7 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Quizmaster</title>
+    <script>
+
+        var res;
+        var test = new XMLHttpRequest;
+        test.onreadystatechange = function(){
+            if(this.readyState === 4){
+                if(test.status === 200){
+                    res = test.response;
+                    console.log(res);
+                }else{
+                    console.log("HTTP-status är inte 200, utan " + test.status);
+                }
+            }
+
+        };
+        test.open("GET"," https://opentdb.com/api.php?amount=10&category=27");
+        test.responseType="json";
+        test.send();
+
+    </script>
 </head>
 <body>
 
