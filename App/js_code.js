@@ -1,47 +1,50 @@
 
-
-
-var incorrectAnswers;
+var allData = [];
+var userAnswers;
+var correctAnswers;
 var index = 1;
+var numOfCorrectAnswers = 0;
 
 function initQuestions(result){
-    questions = [];
-    var questions2 = [];
-    var correctAnswers = [];
-    incorrectAnswers = [];
-    currentIndex = 0;
+
+
+
+    correctAnswers = [];
     result.forEach(function(product){
-        var para = document.createElement("p");
+        allData.push(product);
+        var para = document.createElement("div");
         var element = document.getElementById("list");
+        correctAnswers.push(product.correct_answer);
 
-
-
-        var htmltest = "<div><p>"+"Question "+index+". "+product.question+"<p/>"
-        htmltest += "<button type='button'>True</button>";
-        htmltest += "<button type='button'>False</button>";
-        htmltest +="</div>"
+        var htmltest = "<p>"+"Question "+index+". "+product.question+"<p/>";
+        htmltest +="<button type='button' id='trueButton"+index+"' value='True'>True</button>";
+        htmltest += "<button type='button' id='falseButton"+index+"' value='False'>False</button>";
         para.innerHTML = htmltest;
         element.appendChild(para);
         index++;
-
-
-        questions.push(product.question);
-        questions2.push(product.question);
-        correctAnswers.push(product.correct_answer);
-        incorrectAnswers.push(product.incorrect_answers.toString());
-
     });
-    /*
-    console.log("Hello from init function");
-    console.log(questions);
-    console.log(questions2);
-    console.log(correctAnswers);
-    console.log(incorrectAnswers);
-    */
 
-}
+    userAnswers = [];
+    var query = document.querySelector("main");
+    query.addEventListener("click",function(e){
+        //console.log(e.target);
+        if(e.target.nodeName === "BUTTON"){
+            if(e.target.id !== "submitButton") {
+                userAnswers.push(e.target.value);
+            }
+        }
+    });
 
-function start(){
+    var submitButton = document.getElementById("submitButton");
+    submitButton.addEventListener("click", () => (
+        userAnswers.forEach((answer, index)=> {
+            if (answer == correctAnswers[index]){
+                numOfCorrectAnswers++;
+                console.log(numOfCorrectAnswers);
+            }
+        })
+
+    ));
 
 }
 
@@ -53,7 +56,7 @@ httpReq.onreadystatechange = function(){
         if(httpReq.status === 200){
             res = httpReq.response;
             initQuestions(res.results);
-            start();
+
         }else{
             console.log("HTTP-status är inte 200, utan " + httpReq.status);
         }
