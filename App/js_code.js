@@ -31,6 +31,9 @@ function initQuestions(result){
         if(e.target.nodeName === "BUTTON"){
             if(e.target.id !== "submitButton") {
                 userAnswers.push(e.target.value);
+                disableButton(e.target.id);
+            }else{
+                disableButton(e.target.id);
             }
         }
     });
@@ -42,10 +45,20 @@ function initQuestions(result){
                 numOfCorrectAnswers++;
                 console.log(numOfCorrectAnswers);
             }
+            document.getElementById("results").innerHTML = numOfCorrectAnswers;
         })
 
     ));
 
+
+
+
+
+}
+
+function disableButton(id){
+    document.getElementById(id).disabled = true;
+    document.getElementById(id).nextSibling.disabled = true;
 }
 
 
