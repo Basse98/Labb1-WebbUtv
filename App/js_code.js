@@ -4,22 +4,24 @@ var userAnswers;
 var correctAnswers;
 var index = 1;
 var numOfCorrectAnswers = 0;
+var numOfQuestions = 0;
 
 function initQuestions(result){
 
-
-
     correctAnswers = [];
     result.forEach(function(product){
+        numOfQuestions++;
         allData.push(product);
         var para = document.createElement("div");
         var element = document.getElementById("list");
         correctAnswers.push(product.correct_answer);
 
-        var htmltest = "<p>"+"Question "+index+". "+product.question+"<p/>";
-        htmltest +="<button type='button' id='trueButton"+index+"' value='True'>True</button>";
-        htmltest += "<button type='button' id='falseButton"+index+"' value='False'>False</button>";
-        para.innerHTML = htmltest;
+        var htmlText = "<p>"+"Question "+index+". "+product.question+"</p>";
+        htmlText += "<div class='buttonDiv'>";
+        htmlText +="<button type='button' id='trueButton"+index+"' value='True'>True</button>";
+        htmlText += "<button type='button' id='falseButton"+index+"' value='False'>False</button>";
+        htmlText += "</div>";
+        para.innerHTML = htmlText;
         element.appendChild(para);
         index++;
     });
@@ -29,34 +31,40 @@ function initQuestions(result){
     query.addEventListener("click",function(e){
         //console.log(e.target);
         if(e.target.nodeName === "BUTTON"){
+            if(e.target.id !== "submitButton"){
+                var parent = e.target.parentNode;
+                userAnswers.push(e.target.value);
+                parent.childNodes[0].disabled = true;
+                parent.childNodes[1].disabled = true;
+            }else{
+                e.target.disabled = true;
+            }
+            /*
             if(e.target.id !== "submitButton") {
                 userAnswers.push(e.target.value);
-                disableButton(e.target.id);
+                disableButtons(e.target.id);
             }else{
-                disableButton(e.target.id);
+                disableButtons(e.target.id);
             }
+            */
         }
     });
 
     var submitButton = document.getElementById("submitButton");
     submitButton.addEventListener("click", () => (
         userAnswers.forEach((answer, index)=> {
-            if (answer == correctAnswers[index]){
+            if (answer === correctAnswers[index]){
                 numOfCorrectAnswers++;
-                console.log(numOfCorrectAnswers);
             }
-            document.getElementById("results").innerHTML = numOfCorrectAnswers;
+            document.getElementsByClassName("results")[0].innerHTML = "Results: " + numOfCorrectAnswers + " / " + numOfQuestions;
         })
 
     ));
 
 
-
-
-
 }
 
-function disableButton(id){
+function disableButtons(id){
     document.getElementById(id).disabled = true;
     document.getElementById(id).nextSibling.disabled = true;
 }
@@ -76,6 +84,6 @@ httpReq.onreadystatechange = function(){
     }
 
 };
-httpReq.open("GET"," https://opentdb.com/api.php?amount=10&category=27&type=boolean");
+httpReq.open("GET","https://opentdb.com/api.php?amount=15&category=22&type=boolean");
 httpReq.responseType="json";
 httpReq.send();
